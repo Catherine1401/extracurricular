@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('link');
             $table->integer('points');
             $table->integer('type');
-            $table->string('categoty');
+            $table->string('category');
             $table->boolean('is_closed')->default(false);
             $table->dateTime('start_at');
             $table->dateTime('end_at');
