@@ -30,13 +30,13 @@ class ActivityController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
-            'link' => 'required',
-            'points' => 'required',
-            'type' => 'required',
-            'category' => 'required',
-            'start_at' => 'required',
-            'end_at' => 'required',
+            'title' => 'required|string|max:255',
+            'link' => 'required|url',
+            'points' => 'required|integer|min:0|max:20',
+            'type' => 'required|integer|in:1,2,3',
+            'category' => 'required|string|in:sport,academy,volunteer',
+            'start_at' => 'required|date|before:end_at',
+            'end_at' => 'required|date|after:start_at',
         ]);
 
         Activity::create($request->only([
@@ -75,13 +75,13 @@ class ActivityController extends Controller
     public function update(Request $request, Activity $activity)
     {
         $request->validate([
-            'title' => 'required',
-            'link' => 'required',
-            'points' => 'required',
-            'type' => 'required',
-            'category' => 'required',
-            'start_at' => 'required',
-            'end_at' => 'required',
+            'title' => 'required|string|max:255',
+            'link' => 'required|url',
+            'points' => 'required|integer|min:0|max:20',
+            'type' => 'required|integer|in:1,2,3',
+            'category' => 'required|string|in:sport,academy,volunteer',
+            'start_at' => 'required|date|before:end_at',
+            'end_at' => 'required|date|after:start_at',
         ]);
 
         $activity->update($request->only([

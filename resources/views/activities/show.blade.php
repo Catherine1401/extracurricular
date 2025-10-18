@@ -14,6 +14,7 @@
     <p>{{ $activity->start_at }}</p>
     <p>{{ $activity->end_at }}</p>
   <a href="{{ route('activities.index') }}">Back</a><br>
+  <a href="{{ route('activities.edit', $activity->id) }}">Edit</a>
 
   <form action="{{ route('activities.destroy', $activity) }}" method="post">
     @csrf
