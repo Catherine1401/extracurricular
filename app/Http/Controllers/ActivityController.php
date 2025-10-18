@@ -12,7 +12,7 @@ class ActivityController extends Controller
      */
     public function index()
     {
-        $activities = Activity::all();
+        $activities = Activity::paginate(10);
         return view('activities.index', compact('activities'));
     }
 
@@ -84,7 +84,7 @@ class ActivityController extends Controller
             'end_at' => 'required',
         ]);
 
-        Activity::update($request->only([
+        $activity->update($request->only([
             'title',
             'content',
             'link',

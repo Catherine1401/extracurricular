@@ -13,5 +13,7 @@
   @foreach ($activities as $activity)
       <a href="{{ route('activities.show', $activity->id) }}">{{ $activity->title }}</a><br>
   @endforeach
+
+  {{ $activities->links() }}
 </body>
 </html>
