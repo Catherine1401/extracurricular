@@ -426,10 +426,10 @@
         .category-chip {
             display: inline-flex;
             align-items: center;
-            height: 32px;
-            padding: 0 12px;
-            border-radius: 16px;
-            font-size: 12px;
+            height: 28px;
+            padding: 0 10px;
+            border-radius: 14px;
+            font-size: 11px;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -493,19 +493,19 @@
         .points-chip {
             background: linear-gradient(135deg, #9c27b0 0%, #673ab7 100%);
             color: white;
-            height: 32px;
-            padding: 0 12px;
-            border-radius: 16px;
+            height: 28px;
+            padding: 0 10px;
+            border-radius: 14px;
             font-weight: 500;
-            font-size: 12px;
+            font-size: 11px;
             display: inline-flex;
             align-items: center;
         }
         
         .status-chip {
-            height: 24px;
-            padding: 0 8px;
-            border-radius: 12px;
+            height: 28px;
+            padding: 0 10px;
+            border-radius: 14px;
             font-size: 11px;
             font-weight: 500;
             display: inline-flex;
@@ -525,9 +525,9 @@
         .organization-chip {
             background-color: #e8f5e8;
             color: #2e7d32;
-            height: 24px;
-            padding: 0 8px;
-            border-radius: 12px;
+            height: 28px;
+            padding: 0 10px;
+            border-radius: 14px;
             font-size: 11px;
             font-weight: 500;
             display: inline-flex;
@@ -587,13 +587,19 @@
                         </a>
                     @endif
                     
-                    @if(Auth::check() && Auth::user()->isAdmin())
-                        <a href="{{ route('categories.index') }}" 
-                           class="material-sidebar-item {{ request()->routeIs('categories.*') ? 'active' : '' }}">
-                            <span class="material-icons material-sidebar-item-icon">category</span>
-                            <span class="material-sidebar-item-text">Quản lý danh mục</span>
-                        </a>
-                    @endif
+                @if(Auth::check() && Auth::user()->isAdmin())
+                    <a href="{{ route('categories.index') }}"
+                       class="material-sidebar-item {{ request()->routeIs('categories.*') ? 'active' : '' }}">
+                        <span class="material-icons material-sidebar-item-icon">category</span>
+                        <span class="material-sidebar-item-text">Quản lý danh mục</span>
+                    </a>
+
+                    <a href="{{ route('users.index') }}"
+                       class="material-sidebar-item {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                        <span class="material-icons material-sidebar-item-icon">people</span>
+                        <span class="material-sidebar-item-text">Quản lý người dùng</span>
+                    </a>
+                @endif
                 </div>
             </nav>
         </aside>
