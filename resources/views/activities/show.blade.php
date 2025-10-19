@@ -18,19 +18,15 @@
         <!-- Card Header -->
         <div style="background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%); color: white; padding: 32px;">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
-                <span class="category-chip category-{{ $activity->category }}" style="background-color: rgba(255,255,255,0.2); color: white;">
-                    @switch($activity->category)
-                        @case('academy')
-                            Học thuật
-                            @break
-                        @case('sport')
-                            Thể thao
-                            @break
-                        @case('volunteer')
-                            Tình nguyện
-                            @break
-                    @endswitch
-                </span>
+                @if($activity->category)
+                    <span class="category-chip category-{{ $activity->category->id }}" style="background-color: rgba(255,255,255,0.2); color: white;">
+                        {{ $activity->category->name }}
+                    </span>
+                @else
+                    <span class="category-chip category-none" style="background-color: rgba(255,255,255,0.2); color: white;">
+                        Chưa phân loại
+                    </span>
+                @endif
                 <span class="points-chip" style="background: rgba(255,255,255,0.2); color: white;">
                     {{ $activity->points }} điểm
                 </span>

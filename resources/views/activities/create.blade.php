@@ -121,18 +121,20 @@
 
                     <!-- Category Field -->
                     <div class="material-form-field">
-                        <label for="category" class="material-form-label">
+                        <label for="category_id" class="material-form-label">
                             Danh mục <span style="color: #d32f2f;">*</span>
                         </label>
-                        <select name="category" 
-                                id="category"
-                                class="material-form-select @error('category') material-form-input-error @enderror">
+                        <select name="category_id" 
+                                id="category_id"
+                                class="material-form-select @error('category_id') material-form-input-error @enderror">
                             <option value="">Chọn danh mục</option>
-                            <option value="academy" {{ old('category') == 'academy' ? 'selected' : '' }}>Học thuật</option>
-                            <option value="sport" {{ old('category') == 'sport' ? 'selected' : '' }}>Thể thao</option>
-                            <option value="volunteer" {{ old('category') == 'volunteer' ? 'selected' : '' }}>Tình nguyện</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
                         </select>
-                        @error('category')
+                        @error('category_id')
                             <div class="material-form-error">
                                 <span class="material-icons" style="font-size: 16px;">error</span>
                                 {{ $message }}

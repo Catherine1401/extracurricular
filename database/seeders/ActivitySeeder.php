@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Activity;
+use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
@@ -15,6 +16,7 @@ class ActivitySeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create('vi_VN');
+        $categories = Category::all();
 
         for ($i = 0; $i < 100; $i++) {
             Activity::create([
@@ -24,7 +26,7 @@ class ActivitySeeder extends Seeder
                 'points' => $faker->numberBetween(1, 20),
                 'start_at' => $faker->dateTimeBetween('now', '+2 week'),
                 'end_at' => $faker->dateTimeBetween('+3 week', '+1 month'),
-                'category' => $faker->randomElement(['academy', 'sport', 'volunteer']),
+                'category_id' => $categories->random()->id,
                 'type' => $faker->numberBetween(1, 3),
             ]);
         }

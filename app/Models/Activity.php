@@ -12,9 +12,13 @@ class Activity extends Model
         'link',
         'points',
         'type',
-        'category',
+        'category_id',
         'is_closed',
         'start_at',
         'end_at'
     ];
+
+    public function category() {
+        return $this->belongsTo(Category::class);
+    }
 }

@@ -21,19 +21,15 @@
                 <!-- Card Header -->
                 <div style="padding: 16px 16px 0 16px;">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
-                        <span class="category-chip category-{{ $activity->category }}">
-                            @switch($activity->category)
-                                @case('academy')
-                                    Học thuật
-                                    @break
-                                @case('sport')
-                                    Thể thao
-                                    @break
-                                @case('volunteer')
-                                    Tình nguyện
-                                    @break
-                            @endswitch
-                        </span>
+                        @if($activity->category)
+                            <span class="category-chip category-{{ $activity->category->id }}">
+                                {{ $activity->category->name }}
+                            </span>
+                        @else
+                            <span class="category-chip category-none">
+                                Chưa phân loại
+                            </span>
+                        @endif
                         <span class="points-chip">{{ $activity->points }} điểm</span>
                         <span class="status-chip {{ $activity->is_closed ? 'status-closed' : 'status-open' }}">
                             {{ $activity->is_closed ? 'Đã đóng' : 'Đang mở' }}

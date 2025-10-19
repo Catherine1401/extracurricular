@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Category;
 use Illuminate\Notifications\Action;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +36,8 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
     Route::get('/activities/{activity}/edit', [ActivityController::class, 'edit'])->name('activities.edit');
     Route::put('/activities/{activity}', [ActivityController::class, 'update'])->name('activities.update');
     Route::delete('/activities/{activity}', [ActivityController::class, 'destroy'])->name('activities.destroy');
+
+    Route::resource('categories', CategoryController::class);
 });
 
 require __DIR__.'/auth.php';
