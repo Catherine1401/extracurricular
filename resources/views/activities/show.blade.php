@@ -1,6 +1,6 @@
 @extends('activities.layout')
 
-@section('title', $activity->title)
+@section('title', 'Dashboard - ' . $activity->title)
 
 @section('content')
 <div style="display: flex; flex-direction: column; gap: 24px;">
@@ -25,6 +25,11 @@
                 @else
                     <span class="category-chip category-none" style="background-color: rgba(255,255,255,0.2); color: white;">
                         Chưa phân loại
+                    </span>
+                @endif
+                @if($activity->organization)
+                    <span class="organization-chip" style="background-color: rgba(255,255,255,0.2); color: white;">
+                        🏢 {{ $activity->organization->name }}
                     </span>
                 @endif
                 <span class="points-chip" style="background: rgba(255,255,255,0.2); color: white;">
@@ -150,25 +155,27 @@
                 Cập nhật lần cuối: {{ $activity->updated_at->format('d/m/Y H:i') }}
             </div>
             
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <a href="{{ route('activities.edit', $activity->id) }}" 
-                   class="material-button material-button-primary" style="text-decoration: none;">
-                    <span class="material-icons" style="margin-right: 8px;">edit</span>
-                    Chỉnh sửa
-                </a>
-                
-                <form action="{{ route('activities.destroy', $activity->id) }}" 
-                      method="POST" 
-                      style="display: inline;"
-                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa hoạt động này? Hành động này không thể hoàn tác.')">
-    @csrf
-    @method('DELETE')
-                    <button type="submit" class="material-button material-button-danger">
-                        <span class="material-icons" style="margin-right: 8px;">delete</span>
-                        Xóa
-                    </button>
-  </form>
-            </div>
+            @if(Auth::user()->isAdmin() || (Auth::user()->isOrganization() && $activity->organization_id == Auth::user()->id))
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <a href="{{ route('activities.edit', $activity->id) }}" 
+                       class="material-button material-button-primary" style="text-decoration: none;">
+                        <span class="material-icons" style="margin-right: 8px;">edit</span>
+                        Chỉnh sửa
+                    </a>
+                    
+                    <form action="{{ route('activities.destroy', $activity->id) }}" 
+                          method="POST" 
+                          style="display: inline;"
+                          onsubmit="return confirm('Bạn có chắc chắn muốn xóa hoạt động này? Hành động này không thể hoàn tác.')">
+        @csrf
+        @method('DELETE')
+                        <button type="submit" class="material-button material-button-danger">
+                            <span class="material-icons" style="margin-right: 8px;">delete</span>
+                            Xóa
+                        </button>
+      </form>
+                </div>
+            @endif
         </div>
     </div>
 </div>

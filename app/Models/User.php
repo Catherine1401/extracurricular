@@ -46,4 +46,20 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    
+    public function activities() {
+        return $this->hasMany(Activity::class, 'organization_id');
+    }
+    
+    public function isAdmin() {
+        return $this->role === 'admin';
+    }
+    
+    public function isOrganization() {
+        return $this->role === 'organization';
+    }
+    
+    public function isUser() {
+        return $this->role === 'user';
+    }
 }

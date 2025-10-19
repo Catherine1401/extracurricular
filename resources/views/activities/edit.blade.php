@@ -1,6 +1,6 @@
 @extends('activities.layout')
 
-@section('title', 'Chỉnh sửa hoạt động')
+@section('title', 'Quản lý hoạt động - Chỉnh sửa')
 
 @section('content')
 <div style="display: flex; flex-direction: column; gap: 24px;">

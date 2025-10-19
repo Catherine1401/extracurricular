@@ -138,6 +138,17 @@
             z-index: 999;
         }
         
+        .material-topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .material-topbar-right {
+            display: flex;
+            align-items: center;
+        }
+        
         .material-topbar-title {
             font-size: 24px;
             font-weight: 400;
@@ -145,10 +156,109 @@
             margin: 0;
         }
         
-        .material-topbar-actions {
+        /* User Menu Styles */
+        .material-user-menu {
+            position: relative;
+        }
+        
+        .material-user-button {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
+            padding: 8px 16px;
+            background: none;
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .material-user-button:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .material-user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .material-user-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #424242;
+        }
+        
+        .material-user-arrow {
+            font-size: 20px;
+            color: #9e9e9e;
+            transition: transform 0.3s ease;
+        }
+        
+        .material-user-menu.open .material-user-arrow {
+            transform: rotate(180deg);
+        }
+        
+        .material-user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 200px;
+            padding: 8px 0;
+            margin-top: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .material-user-menu.open .material-user-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .material-user-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #424242;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+        
+        .material-user-dropdown-item:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .material-user-dropdown-item.material-user-logout {
+            color: #d32f2f;
+        }
+        
+        .material-user-dropdown-item.material-user-logout:hover {
+            background-color: #ffebee;
+        }
+        
+        .material-user-dropdown-divider {
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 8px 0;
         }
         
         .material-sidebar-toggle {
@@ -412,6 +522,18 @@
             color: #d32f2f;
         }
         
+        .organization-chip {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+            height: 24px;
+            padding: 0 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+        }
+        
         /* Responsive Design */
         @media (max-width: 768px) {
             .material-sidebar {
@@ -442,51 +564,36 @@
             </div>
             
             <nav class="material-sidebar-nav">
-                <div class="material-sidebar-section">
-                    <div class="material-sidebar-section-title">Tổng quan</div>
-                    <a href="{{ route('dashboard') }}" 
-                       class="material-sidebar-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                        <span class="material-icons material-sidebar-item-icon">dashboard</span>
-                        <span class="material-sidebar-item-text">Dashboard</span>
-                    </a>
-                </div>
+                @if(Auth::check() && !Auth::user()->isAdmin())
+                    <div class="material-sidebar-section">
+                        <div class="material-sidebar-section-title">Tổng quan</div>
+                        <a href="{{ route('activities.index') }}" 
+                           class="material-sidebar-item {{ request()->routeIs('activities.index') ? 'active' : '' }}">
+                            <span class="material-icons material-sidebar-item-icon">dashboard</span>
+                            <span class="material-sidebar-item-text">Dashboard</span>
+                        </a>
+                    </div>
+                @endif
                 
                 <div class="material-sidebar-divider"></div>
                 
                 <div class="material-sidebar-section">
                     <div class="material-sidebar-section-title">Quản lý</div>
-                    <a href="{{ route('activities.index') }}" 
-                       class="material-sidebar-item {{ request()->routeIs('activities.*') ? 'active' : '' }}">
-                        <span class="material-icons material-sidebar-item-icon">event</span>
-                        <span class="material-sidebar-item-text">Hoạt động</span>
-                    </a>
+                    @if(Auth::check() && (Auth::user()->isAdmin() || Auth::user()->isOrganization()))
+                        <a href="{{ route('activities.my') }}" 
+                           class="material-sidebar-item {{ request()->routeIs('activities.my') || request()->routeIs('activities.create') || request()->routeIs('activities.edit') ? 'active' : '' }}">
+                            <span class="material-icons material-sidebar-item-icon">event_note</span>
+                            <span class="material-sidebar-item-text">Quản lý hoạt động</span>
+                        </a>
+                    @endif
                     
-                    @if(Auth::check() && Auth::user()->role === 'admin')
+                    @if(Auth::check() && Auth::user()->isAdmin())
                         <a href="{{ route('categories.index') }}" 
                            class="material-sidebar-item {{ request()->routeIs('categories.*') ? 'active' : '' }}">
                             <span class="material-icons material-sidebar-item-icon">category</span>
-                            <span class="material-sidebar-item-text">Danh mục</span>
+                            <span class="material-sidebar-item-text">Quản lý danh mục</span>
                         </a>
                     @endif
-                </div>
-                
-                <div class="material-sidebar-divider"></div>
-                
-                <div class="material-sidebar-section">
-                    <div class="material-sidebar-section-title">Tài khoản</div>
-                    <a href="{{ route('profile.edit') }}" 
-                       class="material-sidebar-item {{ request()->routeIs('profile.*') ? 'active' : '' }}">
-                        <span class="material-icons material-sidebar-item-icon">person</span>
-                        <span class="material-sidebar-item-text">Hồ sơ</span>
-                    </a>
-                    
-                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                        @csrf
-                        <button type="submit" class="material-sidebar-item" style="width: 100%; text-align: left; background: none; border: none; cursor: pointer;">
-                            <span class="material-icons material-sidebar-item-icon">logout</span>
-                            <span class="material-sidebar-item-text">Đăng xuất</span>
-                        </button>
-                    </form>
                 </div>
             </nav>
         </aside>
@@ -495,12 +602,36 @@
         <main class="material-main" id="main">
             <!-- Top Bar -->
             <div class="material-topbar">
-                <button class="material-sidebar-toggle" onclick="toggleSidebar()">
-                    <span class="material-icons">menu</span>
-                </button>
-                <h1 class="material-topbar-title">@yield('title', 'Quản lý hoạt động ngoại khóa')</h1>
-                <div class="material-topbar-actions">
-                    <span class="material-typography-body2">👋 {{ Auth::user()->name ?? 'Khách' }}</span>
+                <div class="material-topbar-left">
+                    <button class="material-sidebar-toggle" onclick="toggleSidebar()">
+                        <span class="material-icons">menu</span>
+                    </button>
+                    <h1 class="material-topbar-title">@yield('title', 'Quản lý hoạt động ngoại khóa')</h1>
+                </div>
+                <div class="material-topbar-right">
+                    <div class="material-user-menu">
+                        <button class="material-user-button" onclick="toggleUserMenu()">
+                            <div class="material-user-avatar">
+                                <span class="material-icons">person</span>
+                            </div>
+                            <span class="material-user-name">{{ Auth::user()->name ?? 'Khách' }}</span>
+                            <span class="material-icons material-user-arrow">keyboard_arrow_down</span>
+                        </button>
+                        <div class="material-user-dropdown" id="userDropdown">
+                            <a href="{{ route('profile.edit') }}" class="material-user-dropdown-item">
+                                <span class="material-icons">person</span>
+                                <span>Hồ sơ cá nhân</span>
+                            </a>
+                            <div class="material-user-dropdown-divider"></div>
+                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="material-user-dropdown-item material-user-logout">
+                                    <span class="material-icons">logout</span>
+                                    <span>Đăng xuất</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -511,8 +642,8 @@
         </main>
     </div>
     
-    <!-- Floating Action Button for Create -->
-    @if(request()->routeIs('activities.index'))
+    <!-- Floating Action Button for Create - Chỉ cho organization -->
+    @if(request()->routeIs('activities.my') && Auth::user()->isOrganization())
         <a href="{{ route('activities.create') }}" class="material-fab" title="Tạo hoạt động mới">
             <span class="material-icons">add</span>
         </a>
@@ -526,6 +657,19 @@
             sidebar.classList.toggle('hidden');
             main.classList.toggle('full-width');
         }
+        
+        function toggleUserMenu() {
+            const userMenu = document.querySelector('.material-user-menu');
+            userMenu.classList.toggle('open');
+        }
+        
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const userMenu = document.querySelector('.material-user-menu');
+            if (!userMenu.contains(e.target)) {
+                userMenu.classList.remove('open');
+            }
+        });
         
         // Ripple effect for clickable cards
         document.addEventListener('click', function(e) {

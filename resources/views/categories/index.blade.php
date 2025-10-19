@@ -1,4 +1,6 @@
-@extends('categories.layout')
+@extends('activities.layout')
+
+@section('title', 'Quản lý danh mục')
 
 @section('content')
 <div class="container mx-auto mt-8">

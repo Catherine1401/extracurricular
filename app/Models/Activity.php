@@ -13,6 +13,7 @@ class Activity extends Model
         'points',
         'type',
         'category_id',
+        'organization_id',
         'is_closed',
         'start_at',
         'end_at'
@@ -20,5 +21,9 @@ class Activity extends Model
 
     public function category() {
         return $this->belongsTo(Category::class);
+    }
+    
+    public function organization() {
+        return $this->belongsTo(User::class, 'organization_id');
     }
 }

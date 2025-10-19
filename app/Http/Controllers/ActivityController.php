@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityController extends Controller
 {
@@ -13,8 +15,27 @@ class ActivityController extends Controller
      */
     public function index()
     {
-        $activities = Activity::with('category')->paginate(10);
+        // Dashboard - Hiển thị tất cả activities của toàn bộ user
+        $activities = Activity::with(['category', 'organization'])->paginate(10);
         return view('activities.index', compact('activities'));
+    }
+    
+    public function myActivities()
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        
+        if ($user->isAdmin()) {
+            // Admin xem tất cả activities
+            $activities = Activity::with(['category', 'organization'])->paginate(10);
+        } else {
+            // Organization chỉ xem activities của mình
+            $activities = Activity::with(['category', 'organization'])
+                ->where('organization_id', $user->id)
+                ->paginate(10);
+        }
+        
+        return view('activities.my', compact('activities'));
     }
 
     /**
@@ -22,6 +43,14 @@ class ActivityController extends Controller
      */
     public function create()
     {
+        /** @var User $user */
+        $user = Auth::user();
+        
+        // Chỉ organization mới có thể tạo activities
+        if (!$user->isOrganization()) {
+            abort(403, 'Bạn không có quyền tạo hoạt động');
+        }
+        
         $categories = Category::all();
         return view('activities.create', compact('categories'));
     }
@@ -31,6 +60,14 @@ class ActivityController extends Controller
      */
     public function store(Request $request)
     {
+        /** @var User $user */
+        $user = Auth::user();
+        
+        // Chỉ organization mới có thể tạo activities
+        if (!$user->isOrganization()) {
+            abort(403, 'Bạn không có quyền tạo hoạt động');
+        }
+        
         $request->validate([
             'title' => 'required|string|max:255',
             'link' => 'required|url',
@@ -41,7 +78,7 @@ class ActivityController extends Controller
             'end_at' => 'required|date|after:start_at',
         ]);
 
-        Activity::create($request->only([
+        $data = $request->only([
             'title',
             'content',
             'link',
@@ -50,9 +87,14 @@ class ActivityController extends Controller
             'category_id',
             'start_at',
             'end_at',
-        ]));
+        ]);
+        
+        // Organization tự động gán organization_id
+        $data['organization_id'] = $user->id;
 
-        return redirect()->route('activities.index');
+        Activity::create($data);
+
+        return redirect()->route('activities.my');
     }
 
     /**
@@ -60,7 +102,8 @@ class ActivityController extends Controller
      */
     public function show(Activity $activity)
     {
-        $activity->load('category');
+        // Tất cả user đều có thể xem activities (read-only)
+        $activity->load(['category', 'organization']);
         return view('activities.show', compact('activity'));
     }
 
@@ -69,6 +112,14 @@ class ActivityController extends Controller
      */
     public function edit(Activity $activity)
     {
+        /** @var User $user */
+        $user = Auth::user();
+        
+        // Chỉ admin và organization sở hữu activity mới có thể edit
+        if (!$user->isAdmin() && (!$user->isOrganization() || $activity->organization_id !== $user->id)) {
+            abort(403, 'Bạn không có quyền chỉnh sửa hoạt động này');
+        }
+        
         $categories = Category::all();
         return view('activities.edit', compact('activity', 'categories'));
     }
@@ -78,6 +129,14 @@ class ActivityController extends Controller
      */
     public function update(Request $request, Activity $activity)
     {
+        /** @var User $user */
+        $user = Auth::user();
+        
+        // Chỉ admin và organization sở hữu activity mới có thể update
+        if (!$user->isAdmin() && (!$user->isOrganization() || $activity->organization_id !== $user->id)) {
+            abort(403, 'Bạn không có quyền cập nhật hoạt động này');
+        }
+        
         $request->validate([
             'title' => 'required|string|max:255',
             'link' => 'required|url',
@@ -88,7 +147,7 @@ class ActivityController extends Controller
             'end_at' => 'required|date|after:start_at',
         ]);
 
-        $activity->update($request->only([
+        $data = $request->only([
             'title',
             'content',
             'link',
@@ -97,7 +156,14 @@ class ActivityController extends Controller
             'category_id',
             'start_at',
             'end_at',
-        ]));
+        ]);
+        
+        // Organization giữ nguyên organization_id
+        if ($user->isOrganization()) {
+            $data['organization_id'] = $user->id;
+        }
+
+        $activity->update($data);
 
         return redirect()->route('activities.index');
     }
@@ -107,6 +173,14 @@ class ActivityController extends Controller
      */
     public function destroy(Activity $activity)
     {
+        /** @var User $user */
+        $user = Auth::user();
+        
+        // Chỉ admin và organization sở hữu activity mới có thể delete
+        if (!$user->isAdmin() && (!$user->isOrganization() || $activity->organization_id !== $user->id)) {
+            abort(403, 'Bạn không có quyền xóa hoạt động này');
+        }
+        
         $activity->delete();
         return redirect()->route('activities.index');
     }

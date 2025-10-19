@@ -1,6 +1,6 @@
 @extends('activities.layout')
 
-@section('title', 'Dashboard - Danh sách hoạt động')
+@section('title', 'Quản lý hoạt động - Danh sách')
 
 @section('content')
 <div style="display: flex; flex-direction: column; gap: 24px;">
@@ -8,8 +8,8 @@
     <div class="material-card" style="padding: 24px; cursor: default;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <h2 class="material-typography-h1" style="font-size: 28px; margin-bottom: 8px;">Hoạt động ngoại khóa</h2>
-                <p class="material-typography-body1" style="color: #616161; margin: 0;">Khám phá các hoạt động thú vị và bổ ích</p>
+                <h2 class="material-typography-h1" style="font-size: 28px; margin-bottom: 8px;">Quản lý hoạt động</h2>
+                <p class="material-typography-body1" style="color: #616161; margin: 0;">Quản lý các hoạt động của tổ chức bạn</p>
             </div>
         </div>
     </div>
@@ -95,29 +95,27 @@
                     </div>
                     
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        @if(Auth::user()->isAdmin())
-                            <a href="{{ route('activities.edit', $activity->id) }}" 
-                               class="material-button material-button-secondary" 
-                               style="text-decoration: none; padding: 6px 10px; font-size: 12px;"
-                               onclick="event.stopPropagation();">
-                                <span class="material-icons" style="font-size: 16px; margin-right: 4px;">edit</span>
-                                Sửa
-                            </a>
-                            
-                            <form action="{{ route('activities.destroy', $activity->id) }}" 
-                                  method="POST" 
-                                  style="display: inline;"
-                                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa hoạt động này?')"
-                                  onclick="event.stopPropagation();">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="material-button material-button-danger" 
-                                        style="padding: 6px 10px; font-size: 12px;">
-                                    <span class="material-icons" style="font-size: 16px; margin-right: 4px;">delete</span>
-                                    Xóa
-                                </button>
-                            </form>
-                        @endif
+                        <a href="{{ route('activities.edit', $activity->id) }}" 
+                           class="material-button material-button-secondary" 
+                           style="text-decoration: none; padding: 8px 12px; font-size: 12px;"
+                           onclick="event.stopPropagation();">
+                            <span class="material-icons" style="font-size: 16px; margin-right: 4px;">edit</span>
+                            Sửa
+                        </a>
+                        
+                        <form action="{{ route('activities.destroy', $activity->id) }}" 
+                              method="POST" 
+                              style="display: inline;"
+                              onsubmit="return confirm('Bạn có chắc chắn muốn xóa hoạt động này?')"
+                              onclick="event.stopPropagation();">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="material-button material-button-danger" 
+                                    style="padding: 8px 12px; font-size: 12px;">
+                                <span class="material-icons" style="font-size: 16px; margin-right: 4px;">delete</span>
+                                Xóa
+                            </button>
+                        </form>
                         
                     </div>
                 </div>

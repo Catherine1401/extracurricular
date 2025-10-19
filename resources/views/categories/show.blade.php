@@ -1,4 +1,6 @@
-@extends('categories.layout')
+@extends('activities.layout')
+
+@section('title', 'Quản lý danh mục - ' . $category->name)
 
 @section('content')
 <div class="container mx-auto mt-8 max-w-lg">

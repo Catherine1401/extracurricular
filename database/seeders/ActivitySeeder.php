@@ -17,9 +17,10 @@ class ActivitySeeder extends Seeder
     {
         $faker = Faker::create('vi_VN');
         $categories = Category::all();
+        $organizations = \App\Models\User::where('role', 'organization')->get();
 
         for ($i = 0; $i < 100; $i++) {
-            Activity::create([
+            $data = [
                 'title' => $faker->sentence(3),
                 'content' => $faker->paragraph(),
                 'link' => $faker->url(),
@@ -28,7 +29,14 @@ class ActivitySeeder extends Seeder
                 'end_at' => $faker->dateTimeBetween('+3 week', '+1 month'),
                 'category_id' => $categories->random()->id,
                 'type' => $faker->numberBetween(1, 3),
-            ]);
+            ];
+            
+            // Tất cả activities đều phải có organization
+            if ($organizations->isNotEmpty()) {
+                $data['organization_id'] = $organizations->random()->id;
+            }
+            
+            Activity::create($data);
         }
     }
 }
