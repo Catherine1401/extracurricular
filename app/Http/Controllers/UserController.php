@@ -12,7 +12,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         /** @var User $user */
         $user = Auth::user();
@@ -22,7 +22,19 @@ class UserController extends Controller
             abort(403, 'Bạn không có quyền quản lý người dùng');
         }
         
-        $users = User::paginate(15);
+        $query = User::query();
+        
+        // Tìm kiếm
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'like', "%{$searchTerm}%")
+                  ->orWhere('email', 'like', "%{$searchTerm}%");
+            });
+        }
+        
+        $users = $query->paginate(15)->withQueryString();
+        
         return view('users.index', compact('users'));
     }
 

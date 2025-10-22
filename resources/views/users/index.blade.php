@@ -33,6 +33,46 @@
         </div>
     @endif
 
+    <!-- Search Results Info -->
+    @if(request('search'))
+        <div class="material-card" style="padding: 16px; background-color: #e3f2fd; border-left: 4px solid #1976d2; cursor: default;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="material-icons" style="color: #1976d2;">search</span>
+                <span class="material-typography-body1" style="color: #1565c0; font-weight: 500;">
+                    Kết quả tìm kiếm cho: "{{ request('search') }}" - {{ $users->total() }} người dùng
+                </span>
+            </div>
+        </div>
+    @endif
+
+    <!-- Search Form -->
+    <div class="material-card" style="padding: 24px; cursor: default;">
+        <form method="GET" action="{{ route('users.index') }}" style="display: flex; gap: 16px; align-items: end;">
+            <div style="flex: 1;">
+                <label class="material-form-label" style="margin-bottom: 8px;">Tìm kiếm người dùng</label>
+                <input type="text" 
+                       name="search" 
+                       value="{{ request('search') }}" 
+                       placeholder="Nhập tên hoặc email người dùng..."
+                       style="width: 100%; padding: 12px 16px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px;"
+                       onfocus="this.style.borderColor='#1976d2'; this.style.outline='none'"
+                       onblur="this.style.borderColor='#e0e0e0'">
+            </div>
+            <button type="submit" 
+                    style="background-color: #1976d2; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                <span class="material-icons" style="font-size: 18px;">search</span>
+                Tìm kiếm
+            </button>
+            @if(request('search'))
+                <a href="{{ route('users.index') }}" 
+                   style="background-color: #f5f5f5; color: #616161; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                    <span class="material-icons" style="font-size: 18px;">clear</span>
+                    Xóa
+                </a>
+            @endif
+        </form>
+    </div>
+
     <!-- Users Table -->
     <div class="material-card" style="overflow: hidden; cursor: default;">
         <div style="overflow-x: auto;">
