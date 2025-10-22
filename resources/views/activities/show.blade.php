@@ -6,7 +6,12 @@
 <div style="display: flex; flex-direction: column; gap: 24px;">
     <!-- Back Button -->
     <div style="display: flex; align-items: center; gap: 16px;">
-        <a href="{{ route('activities.index') }}" 
+        @php
+            $backUrl = auth()->check() && auth()->user()->isAdmin()
+                ? route('activities.my')
+                : route('activities.index');
+        @endphp
+        <a href="{{ $backUrl }}" 
            class="material-button material-button-secondary" style="text-decoration: none;">
             <span class="material-icons" style="margin-right: 8px;">arrow_back</span>
             Quay lại danh sách
@@ -35,8 +40,8 @@
                 <span class="points-chip" style="background: rgba(255,255,255,0.2); color: white;">
                     {{ $activity->points }} điểm
                 </span>
-                <span class="status-chip {{ $activity->is_closed ? 'status-closed' : 'status-open' }}" style="background-color: rgba(255,255,255,0.2); color: white;">
-                    {{ $activity->is_closed ? 'Đã đóng' : 'Đang mở' }}
+                <span class="status-chip {{ $activity->isClosed() ? 'status-closed' : 'status-open' }}" style="background-color: rgba(255,255,255,0.2); color: white;">
+                    {{ $activity->isClosed() ? 'Đã đóng' : 'Đang mở' }}
                 </span>
             </div>
             
@@ -85,14 +90,14 @@
             @if($activity->link)
                 <div style="margin-bottom: 32px;">
                     <h2 class="material-typography-h2" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                        <span class="material-icons" style="font-size: 24px; color: #1976d2;">link</span>
-                        Liên kết
+                        <span class="material-icons" style="font-size: 24px; color: #1976d2;">how_to_reg</span>
+                        Đăng ký tham gia
                     </h2>
                     <a href="{{ $activity->link }}" 
                        target="_blank" 
                        class="material-button material-button-primary" style="text-decoration: none;">
                         <span class="material-icons" style="margin-right: 8px;">open_in_new</span>
-                        Truy cập liên kết
+                        Đăng ký ngay
                     </a>
                 </div>
             @endif

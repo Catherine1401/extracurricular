@@ -236,37 +236,25 @@
                     </div>
                 </div>
 
+                </div>
+
                 <!-- Status Field -->
                 <div class="material-form-field">
                     <label class="material-form-label">
                         Trạng thái hoạt động
                     </label>
-                    <div style="display: flex; gap: 12px;">
-                        <label class="material-radio-card">
-                            <input type="radio" name="is_closed" value="0" {{ old('is_closed', $activity->is_closed ? '1' : '0') == '0' ? 'checked' : '' }} class="material-radio-input">
-                            <div class="material-radio-content">
-                                <div class="material-radio-indicator">
-                                    <div class="material-radio-dot"></div>
+                    <div style="padding: 16px; background-color: #f8f9fa; border-radius: 8px; border-left: 4px solid #1976d2;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="material-icons" style="color: #1976d2;">info</span>
+                            <div>
+                                <div class="material-typography-body1" style="font-weight: 500; margin-bottom: 4px;">
+                                    Trạng thái tự động
                                 </div>
-                                <div>
-                                    <div class="material-typography-body1" style="font-weight: 500; margin-bottom: 4px;">Đang mở</div>
-                                    <div class="material-typography-caption">Hoạt động đang diễn ra</div>
-                                </div>
-                            </div>
-                        </label>
-                        
-                        <label class="material-radio-card">
-                            <input type="radio" name="is_closed" value="1" {{ old('is_closed', $activity->is_closed ? '1' : '0') == '1' ? 'checked' : '' }} class="material-radio-input">
-                            <div class="material-radio-content">
-                                <div class="material-radio-indicator">
-                                    <div class="material-radio-dot"></div>
-                                </div>
-                                <div>
-                                    <div class="material-typography-body1" style="font-weight: 500; margin-bottom: 4px;">Đã đóng</div>
-                                    <div class="material-typography-caption">Hoạt động đã kết thúc</div>
+                                <div class="material-typography-caption" style="color: #616161;">
+                                    Trạng thái sẽ được xác định tự động dựa trên ngày kết thúc hoạt động
                                 </div>
                             </div>
-                        </label>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -14,7 +14,6 @@ class Activity extends Model
         'type',
         'category_id',
         'organization_id',
-        'is_closed',
         'start_at',
         'end_at'
     ];
@@ -25,5 +24,26 @@ class Activity extends Model
     
     public function organization() {
         return $this->belongsTo(User::class, 'organization_id');
+    }
+    
+    /**
+     * Kiểm tra xem hoạt động có đang mở hay không
+     */
+    public function isOpen() {
+        return now()->isBefore($this->end_at);
+    }
+    
+    /**
+     * Kiểm tra xem hoạt động có đã đóng hay không
+     */
+    public function isClosed() {
+        return now()->isAfter($this->end_at);
+    }
+    
+    /**
+     * Kiểm tra xem hoạt động có đang diễn ra hay không
+     */
+    public function isActive() {
+        return now()->isBetween($this->start_at, $this->end_at);
     }
 }

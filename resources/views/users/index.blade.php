@@ -3,20 +3,16 @@
 @section('title', 'Quản lý người dùng')
 
 @section('content')
-<div style="display: flex; flex-direction: column; gap: 24px;">
-    <!-- Page Header -->
+<div class="material-container" style="display: flex; flex-direction: column; gap: 24px;">
+    {{-- <!-- Header -->
     <div class="material-card" style="padding: 24px; cursor: default;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <h2 class="material-typography-h1" style="font-size: 28px; margin-bottom: 8px;">Quản lý người dùng</h2>
                 <p class="material-typography-body1" style="color: #616161; margin: 0;">Quản lý tài khoản người dùng trong hệ thống</p>
             </div>
-            <a href="{{ route('users.create') }}" class="material-button material-button-primary">
-                <span class="material-icons" style="margin-right: 8px;">person_add</span>
-                Thêm người dùng
-            </a>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Success/Error Messages -->
     @if(session('success'))
@@ -133,6 +129,13 @@
             </div>
         </div>
     @endif
+
+    <!-- Floating Action Button (FAB) -->
+    <a href="{{ route('users.create') }}" 
+       class="material-fab" 
+       style="position: fixed; right: 24px; bottom: 24px; width: 56px; height: 56px; border-radius: 50%; background-color: #1976d2; color: white; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 6px 12px rgba(25,118,210,0.3); text-decoration: none;">
+        <span class="material-icons" style="font-size: 24px;">person_add</span>
+    </a>
 </div>
 
 <style>
@@ -150,6 +153,11 @@
     .material-card .material-button {
         font-size: 11px;
         padding: 4px 8px;
+    }
+    
+    .material-fab {
+        right: 16px !important;
+        bottom: 16px !important;
     }
 }
 </style>

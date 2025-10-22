@@ -30,46 +30,63 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
         ]);
 
-        Category::create($request->only(
-            'title',
+        Category::create($request->only([
             'name',
-        ));
+            'description',
+        ]));
 
-        return redirect()->route('activities.index')-with('success', 'Thêm danh mục thành công');
+        return redirect()->route('categories.index')->with('success', 'Thêm danh mục thành công');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Category $category)
     {
-        //
+        return view('categories.show', compact('category'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Category $category)
     {
-        //
+        return view('categories.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $category->update($request->only([
+            'name',
+            'description',
+        ]));
+
+        return redirect()->route('categories.index')->with('success', 'Cập nhật danh mục thành công');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        //
+        // Kiểm tra xem danh mục có hoạt động nào không
+        if ($category->activities()->count() > 0) {
+            return redirect()->route('categories.index')->with('error', 'Không thể xóa danh mục này vì còn có hoạt động đang sử dụng');
+        }
+
+        $category->delete();
+        return redirect()->route('categories.index')->with('success', 'Xóa danh mục thành công');
     }
 }

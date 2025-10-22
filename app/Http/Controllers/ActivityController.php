@@ -165,7 +165,12 @@ class ActivityController extends Controller
 
         $activity->update($data);
 
-        return redirect()->route('activities.index');
+        // Redirect về trang quản lý hoạt động phù hợp với vai trò
+        if ($user->isAdmin()) {
+            return redirect()->route('activities.my')->with('success', 'Hoạt động đã được cập nhật thành công');
+        } else {
+            return redirect()->route('activities.my')->with('success', 'Hoạt động đã được cập nhật thành công');
+        }
     }
 
     /**
@@ -182,6 +187,12 @@ class ActivityController extends Controller
         }
         
         $activity->delete();
-        return redirect()->route('activities.index');
+        
+        // Redirect về trang quản lý hoạt động phù hợp với vai trò
+        if ($user->isAdmin()) {
+            return redirect()->route('activities.my')->with('success', 'Hoạt động đã được xóa thành công');
+        } else {
+            return redirect()->route('activities.my')->with('success', 'Hoạt động đã được xóa thành công');
+        }
     }
 }

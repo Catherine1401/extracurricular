@@ -3,16 +3,16 @@
 @section('title', 'Dashboard - Danh sách hoạt động')
 
 @section('content')
-<div style="display: flex; flex-direction: column; gap: 24px;">
-    <!-- Page Header -->
-    <div class="material-card" style="padding: 24px; cursor: default;">
+<div class="material-container" style="display: flex; flex-direction: column; gap: 24px;">
+    <!-- Header -->
+    {{-- <div class="material-card" style="padding: 24px; cursor: default;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <h2 class="material-typography-h1" style="font-size: 28px; margin-bottom: 8px;">Hoạt động ngoại khóa</h2>
                 <p class="material-typography-body1" style="color: #616161; margin: 0;">Khám phá các hoạt động thú vị và bổ ích</p>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Activities Grid -->
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 16px;">
@@ -33,8 +33,8 @@
                             </span>
                         @endif
                         <span class="points-chip">{{ $activity->points }} điểm</span>
-                        <span class="status-chip {{ $activity->is_closed ? 'status-closed' : 'status-open' }}">
-                            {{ $activity->is_closed ? 'Đã đóng' : 'Đang mở' }}
+                        <span class="status-chip {{ $activity->isClosed() ? 'status-closed' : 'status-open' }}">
+                            {{ $activity->isClosed() ? 'Đã đóng' : 'Đang mở' }}
                         </span>
                         @if($activity->organization)
                             <span class="organization-chip">

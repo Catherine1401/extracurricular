@@ -3,16 +3,32 @@
 @section('title', 'Quản lý hoạt động - Danh sách')
 
 @section('content')
-<div style="display: flex; flex-direction: column; gap: 24px;">
-    <!-- Page Header -->
-    <div class="material-card" style="padding: 24px; cursor: default;">
+<div class="material-container" style="display: flex; flex-direction: column; gap: 24px;">
+    <!-- Header -->
+    {{-- <div class="material-card" style="padding: 24px; cursor: default;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <h2 class="material-typography-h1" style="font-size: 28px; margin-bottom: 8px;">Quản lý hoạt động</h2>
-                <p class="material-typography-body1" style="color: #616161; margin: 0;">Quản lý các hoạt động của tổ chức bạn</p>
+                <p class="material-typography-body1" style="color: #616161; margin: 0;">
+                    @if(auth()->user()->isAdmin())
+                        Quản lý tất cả hoạt động trong hệ thống
+                    @else
+                        Quản lý các hoạt động của tổ chức bạn
+                    @endif
+                </p>
             </div>
         </div>
-    </div>
+    </div> --}}
+
+    <!-- Success Message -->
+    @if(session('success'))
+        <div class="material-card" style="padding: 16px; background-color: #e8f5e8; border-left: 4px solid #4caf50; cursor: default;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="material-icons" style="color: #4caf50;">check_circle</span>
+                <span class="material-typography-body1" style="color: #2e7d32; font-weight: 500;">{{ session('success') }}</span>
+            </div>
+        </div>
+    @endif
 
     <!-- Activities Grid -->
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 16px;">
@@ -33,8 +49,8 @@
                             </span>
                         @endif
                         <span class="points-chip">{{ $activity->points }} điểm</span>
-                        <span class="status-chip {{ $activity->is_closed ? 'status-closed' : 'status-open' }}">
-                            {{ $activity->is_closed ? 'Đã đóng' : 'Đang mở' }}
+                        <span class="status-chip {{ $activity->isClosed() ? 'status-closed' : 'status-open' }}">
+                            {{ $activity->isClosed() ? 'Đã đóng' : 'Đang mở' }}
                         </span>
                         @if($activity->organization)
                             <span class="organization-chip">
