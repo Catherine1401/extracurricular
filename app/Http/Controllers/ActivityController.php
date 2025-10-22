@@ -20,20 +20,33 @@ class ActivityController extends Controller
         return view('activities.index', compact('activities'));
     }
     
-    public function myActivities()
+    public function myActivities(Request $request)
     {
         /** @var User $user */
         $user = Auth::user();
         
+        $query = Activity::with(['category', 'organization']);
+        
         if ($user->isAdmin()) {
             // Admin xem tất cả activities
-            $activities = Activity::with(['category', 'organization'])->paginate(10);
         } else {
             // Organization chỉ xem activities của mình
-            $activities = Activity::with(['category', 'organization'])
-                ->where('organization_id', $user->id)
-                ->paginate(10);
+            $query->where('organization_id', $user->id);
         }
+        
+        // Tìm kiếm
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('title', 'like', "%{$searchTerm}%")
+                  ->orWhere('content', 'like', "%{$searchTerm}%")
+                  ->orWhereHas('organization', function($orgQuery) use ($searchTerm) {
+                      $orgQuery->where('name', 'like', "%{$searchTerm}%");
+                  });
+            });
+        }
+        
+        $activities = $query->paginate(10)->withQueryString();
         
         return view('activities.my', compact('activities'));
     }
